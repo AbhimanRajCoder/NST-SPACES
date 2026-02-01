@@ -2,7 +2,7 @@
 
 > **Find empty classrooms instantly. No login required.**
 
-![NST Spaces Banner](public/nstspaces.png)
+![NST Spaces Banner](app/public/banner.png)
 
 NST Spaces is a modern, intelligent room finding utility designed for the ADYPU campus. It simplifies the process of finding available spaces for study sessions, meetings, or quiet time by parsing official schedule PDFs and providing real-time availability status.
 
