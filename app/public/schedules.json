@@ -1,0 +1,429 @@
+{
+    "lastUpdated": "2026-01-30",
+    "semesters": {
+        "2": {
+            "name": "Semester 2 Timetable",
+            "batches": [
+                "Ramanujan",
+                "Hopper",
+                "Turing",
+                "Neumann"
+            ],
+            "schedules": [
+                {
+                    "room": "501",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "10:30",
+                            "subject": "DSA Lec",
+                            "batch": "Ramanujan"
+                        },
+                        {
+                            "start": "11:00",
+                            "end": "12:00",
+                            "subject": "Maths II Lec",
+                            "batch": "Ramanujan"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "15:00",
+                            "subject": "FOAI Lec",
+                            "batch": "Ramanujan"
+                        },
+                        {
+                            "start": "15:30",
+                            "end": "16:30",
+                            "subject": "Problem Solving Tut",
+                            "batch": "Ramanujan"
+                        },
+                        {
+                            "start": "16:30",
+                            "end": "17:30",
+                            "subject": "WAP Lec",
+                            "batch": "Ramanujan"
+                        }
+                    ]
+                },
+                {
+                    "room": "502",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "10:30",
+                            "subject": "WAP Lec",
+                            "batch": "Hopper"
+                        },
+                        {
+                            "start": "10:30",
+                            "end": "11:30",
+                            "subject": "DSA Lec",
+                            "batch": "Hopper"
+                        },
+                        {
+                            "start": "11:00",
+                            "end": "12:00",
+                            "subject": "Maths II Lec",
+                            "batch": "Hopper"
+                        },
+                        {
+                            "start": "15:00",
+                            "end": "16:00",
+                            "subject": "PC",
+                            "batch": "Hopper"
+                        }
+                    ]
+                },
+                {
+                    "room": "402",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "10:30",
+                            "subject": "FOAI Lec",
+                            "batch": "Turing"
+                        }
+                    ]
+                },
+                {
+                    "room": "504",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "WAP Lab",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "DSA Lab",
+                            "batch": "Turing"
+                        }
+                    ]
+                },
+                {
+                    "room": "503",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "WAP Lab",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "DSA Lab",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "WAP Lab",
+                            "batch": "Ramanujan"
+                        }
+                    ]
+                },
+                {
+                    "room": "505",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "Maths II TUT + DSA Lab",
+                            "batch": "Neumann"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "FOAI Lab",
+                            "batch": "Neumann"
+                        }
+                    ]
+                },
+                {
+                    "room": "405",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "Maths II TUT + DSA Lab",
+                            "batch": "Neumann"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "FOAI Lab",
+                            "batch": "Neumann"
+                        }
+                    ]
+                },
+                {
+                    "room": "403",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "FOAI Lab",
+                            "batch": "Ramanujan"
+                        }
+                    ]
+                },
+                {
+                    "room": "404",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "FOAI Lab",
+                            "batch": "Ramanujan"
+                        }
+                    ]
+                },
+                {
+                    "room": "401",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "11:00",
+                            "end": "12:00",
+                            "subject": "FOAI Lec",
+                            "batch": "Hopper"
+                        }
+                    ]
+                },
+                {
+                    "room": "501",
+                    "day": "Tue",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "DSA Lec + Maths II Lec + WAP Lec",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "15:00",
+                            "subject": "PC",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "17:00",
+                            "end": "18:00",
+                            "subject": "CP Foundation",
+                            "batch": "Turing"
+                        }
+                    ]
+                },
+                {
+                    "room": "502",
+                    "day": "Tue",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "FOAI Lec + DSA Lec + Maths II Lec",
+                            "batch": "Neumann"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "15:00",
+                            "subject": "WAP Lec",
+                            "batch": "Neumann"
+                        }
+                    ]
+                },
+                {
+                    "room": "401",
+                    "day": "Tue",
+                    "occupied": [
+                        {
+                            "start": "11:00",
+                            "end": "12:00",
+                            "subject": "FOAI Lec",
+                            "batch": "Hopper"
+                        }
+                    ]
+                },
+                {
+                    "room": "402",
+                    "day": "Tue",
+                    "occupied": [
+                        {
+                            "start": "15:00",
+                            "end": "16:00",
+                            "subject": "Problem Solving Tut",
+                            "batch": "Hopper"
+                        }
+                    ]
+                }
+            ]
+        },
+        "4": {
+            "name": "Semester 4 Timetable",
+            "batches": [
+                "Ramanujan",
+                "Hopper",
+                "Turing"
+            ],
+            "schedules": [
+                {
+                    "room": "401",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "10:30",
+                            "subject": "AI/ML Lec",
+                            "batch": "Ramanujan"
+                        },
+                        {
+                            "start": "10:30",
+                            "end": "11:30",
+                            "subject": "Maths 4 Lec",
+                            "batch": "Ramanujan"
+                        },
+                        {
+                            "start": "11:00",
+                            "end": "12:00",
+                            "subject": "Maths 4 Lec",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "14:30",
+                            "end": "15:30",
+                            "subject": "AI/ML Lec",
+                            "batch": "Hopper"
+                        },
+                        {
+                            "start": "17:00",
+                            "end": "18:00",
+                            "subject": "NT Lec",
+                            "batch": "Ramanujan"
+                        }
+                    ]
+                },
+                {
+                    "room": "402",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "10:30",
+                            "end": "12:00",
+                            "subject": "SESD Lec + DVA Lec",
+                            "batch": "Hopper"
+                        },
+                        {
+                            "start": "17:00",
+                            "end": "18:00",
+                            "subject": "TIP",
+                            "batch": "Turing"
+                        }
+                    ]
+                },
+                {
+                    "room": "504",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "11:00",
+                            "subject": "Maths 4 Lab",
+                            "batch": "Hopper"
+                        }
+                    ]
+                },
+                {
+                    "room": "503",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "11:00",
+                            "subject": "Maths 4 Lab",
+                            "batch": "Hopper"
+                        }
+                    ]
+                },
+                {
+                    "room": "404",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "SESD Lab + AI/ML Lab",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "DVA Lab + SESD Lab",
+                            "batch": "Ramanujan"
+                        }
+                    ]
+                },
+                {
+                    "room": "403",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "09:30",
+                            "end": "12:00",
+                            "subject": "SESD Lab + AI/ML Lab",
+                            "batch": "Turing"
+                        },
+                        {
+                            "start": "14:00",
+                            "end": "17:00",
+                            "subject": "DVA Lab + SESD Lab",
+                            "batch": "Ramanujan"
+                        },
+                        {
+                            "start": "17:00",
+                            "end": "18:00",
+                            "subject": "Lab 1",
+                            "batch": "Hopper"
+                        }
+                    ]
+                },
+                {
+                    "room": "405",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "14:30",
+                            "end": "17:00",
+                            "subject": "DVA Lab",
+                            "batch": "Turing"
+                        }
+                    ]
+                },
+                {
+                    "room": "505",
+                    "day": "Mon",
+                    "occupied": [
+                        {
+                            "start": "14:30",
+                            "end": "17:00",
+                            "subject": "DVA Lab",
+                            "batch": "Turing"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "_instructions": "Add more schedule entries following the same format. Each room+day combination should list all occupied time slots."
+}

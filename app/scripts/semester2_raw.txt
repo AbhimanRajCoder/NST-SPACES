@@ -1,0 +1,41 @@
+Day	 	10:00-10:	11:30-11:		12:30-13:	13:00-13:	14:30-	15:30-16:	16:30-17:	17:00-17:	17:30-	18:00-18:	18:30-19:
+Sub Batch	 	09:00-09:30	 	9:30-10:00	20	 	10:20-10:30	 	10:30-11:00	 	11:00-11:30	50	 	11:50-12:00	 	12:00-12:30	00	30	 	13:30-14:00	 	14:00-14:30	15:00	 	15:00-15:30	00	 	16:00-16:30	00	30	18.00	30	00	 	19:00-19:30	 	19:30-20:00
+DVA Lab	SESD Lab
+AI/ML Lec	Maths 4 Lec	(Infinity:- 404	(Infinity:- 404	NT Lab
+Ramanujan Batch	(Room no 401)	(Room no 401)	MockTheta:-403)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	MockTheta:-403)	(401)
+Maths 4 Lab	FSDE Lab
+	Mon	(Compiler =504	SESD Lec	DVA Lec	AI/ML Lec	Lab 1 403
+Hopper Batch	Debugger =503 )	(Room no 402)	(Room no 402)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	(Room no 401)	Lab 2 404
+SESD Lab	AI/ML Lab	DVA Lab
+(Enigma = 404	(Enigma:- 404	Maths 4 Lec	(Enigma = 405		TIP- Entrepreneurship Batch
+Turing Batch	Lambda =403)	Lambda:-403)	(Room no 401)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Lambda =505)	(402)
+AI/ML Lab	Maths 4 Lab
+(Infinity:- 404	SESD Lec	(Infinity:- 503	DVA Lec	NT Lec
+Ramanujan Batch	MockTheta:-403)	(Room no 401)	MockTheta:-504)	 	Lunch	 	Lunch	 	Lunch	(Room no 401)	(401)
+AI/ML Lab	DVA Lab	SESD Lab
+	Tue	Maths 4 Lec	(Compiler:- 404	(Compiler =404	(Compiler =405	FSDE
+Hopper Batch	(Room no 401)	Debugger:-403)	Debugger =403 )	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Debugger =505)	(402)
+Maths 4 Lab
+SESD Lec	DVA Lec	AI/ML Lec	(Enigma = 503
+Turing Batch	(Room no 402)	BREAK	(Room no 402)	BREAK	(Room no 402)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Lambda = 504)
+SESD Lab	DVA Lab
+AI/ML Lec	Maths 4 Lec	(Infinity:- 404	(Infinity:- 404
+Ramanujan Batch	(Room no 401)	(Room no 401)	MockTheta:-403)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	MockTheta:-403	 	TIP - NT + FSDE Batch
+Maths 4 Lab	(401)
+Wed	(Compiler =504	AI/ML Lec	DVA Lec	SESD Lec
+	Hopper Batch	Debugger =503 )	(Room no 402)	(Room no 402)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	(Room no 401)	&
+SESD Lab	DVA Lab	AI/ML Lab
+(Enigma = 404	(Enigma = 404	Maths 4 Lec	(Enigma:- 505	CP Central Course
+Turing Batch	Lambda =403)	Lambda =403)	(Room no 401)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Lambda:-405)	(505)
+AI/ML Lab	Maths 4 Lab
+(Infinity:- 404	SESD Lec	(Infinity:- 503	DVA Lec	NT Lec
+Ramanujan Batch	MockTheta:-403)	(Room no 401)	MockTheta:-504)	 	Lunch	 	Lunch	 	Lunch	(Room no 402)	(401)
+AI/ML Lab	DVA Lab	SESD Lab
+Thur	Maths 4 Lec	(Compiler:- 404	(Compiler =404	(Compiler =405	FSDE
+Hopper Batch	(Room no 401)	Debugger:-403)	Debugger =403 )	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Debugger =505)	(402)
+Maths 4 Lab
+SESD Lec	DVA Lec	AI/ML Lec	(Enigma = 503
+Turing Batch	(Room no 402)	(Room no 402)	(Room no 402)	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Lambda = 504)
+Fri	 	CONTEST
+
+--- PAGE BREAK ---

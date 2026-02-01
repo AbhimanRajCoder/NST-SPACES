@@ -1,0 +1,37 @@
+10:00-10:	10:30-10:	10:50-11:	11:00-11:	11:30-12:	12:00-12:	12:30-13:	13:00-13:	13:30-14:	14:00-14:	14:30-15:	15:00-15:	15:30-16:	16:00-16:	16:30-17:	17:00-17:	17:30-	18:00-18:	18:30-19:
+Day	 	Sub Batch	 	9:00-09:30	 	9:30-10:00	30	50	00	30	00	20	 	12:20:30	00	30	00	30	00	30	00	30	00	30	18.00	30	00	 	7:00-7:30
+DSA Lec	Maths II Lec	FOAI Lec	Problem Solving Tut	WAP Lec
+Ramanujan Batch	Room No. 501	Room No. 501	Room No. 501	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Room No. 501	Room No. 501
+WAP Lec	DSA Lec	Maths II Lec		PC
+Mon	Hopper Batch	Room No. 502	Room No. 502	Room No. 502	 	Lunch	 	Lunch	 	Lunch	 	Lunch	(502)
+FOAI Lec	WAP Lab	Maths II TUT	DSA Lab
+	Turing Batch	Room No. 402	Enigma- 504 & Lambda- 503	Enigma- 504 & Lambda- 503	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Enigma- 504 & Lambda- 503
+Maths II TUT	DSA Lab	WAP Lab		FOAI Lab
+Neumann	Memory- 505 & Architecture- 405	Memory- 505 & Architecture- 405	Memory- 505 & Architecture- 405	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Memory- 505 & Architecture- 405
+DSA Lab	WAP Lab	Maths II TUT		FOAI Lab
+Ramanujan Batch	Infinity- 503 & Mock Theta- 504	Infinity- 503 & Mock Theta- 504	Infinity- 405 & Mock Theta- 505	 	Lunch	 	Lunch	 	Lunch	Infinity- 403 & Mock Theta- 404
+Maths II TUT	DSA Lab	FOAI Lec	Problem Solving Tut	WAP Lab
+	Tue		Hopper Batch	Compiler- 505 & Debugger- 405	Compiler- 505 & Debugger- 405	Room No. 401	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Room No. 402	Compiler- 505 & Debugger- 405
+DSA Lec	Maths II Lec	WAP Lec		PC	CP Foundation
+Turing Batch	Room No. 501	Room No. 501	Room No. 501	 	Lunch	 	Lunch	 	Lunch	(501)	Room no. 501
+FOAI Lec	DSA Lec	Maths II Lec	WAP Lec
+	Neumann	Room No. 502	BREAK	Room No. 502	Room No. 502	 	Lunch	 	Lunch	 	Lunch	Room No. 502
+DSA Lec	Maths II Lec	BREAK	FOAI Lec	WAP Lec
+Ramanujan Batch	Room No. 501	Room No. 501	Room No. 501	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Room No. 402
+WAP Lec	DSA Lec	Maths II Lec		FOAI Lab
+Wed	Hopper Batch	Room No. 502	Room No. 502	Room No. 502	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Compiler- 503 & Debugger- 504
+FOAI Lec	WAP Lab	Maths II TUT	Problem Solving Tut	DSA Lab
+	Turing Batch	Room No. 402	Enigma- 504 & Lambda- 503	Enigma- 504 & Lambda- 503	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Room No. 501	Enigma- 403 & Lambda- 404
+Maths II TUT	DSA Lab	WAP Lab	Problem Solving Tut		PC
+Neumann	Memory- 505 & Architecture- 405	Memory- 505 & Architecture- 405	Memory- 505 & Architecture- 405	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Room No. 502	(501)
+DSA Lab	WAP Lab	Maths II TUT		PC
+Ramanujan Batch	Infinity- 503 & Mock Theta- 504	Infinity- 503 & Mock Theta- 504	Infinity- 405 & Mock Theta- 505	 	Lunch	 	Lunch	 	Lunch	 	Lunch	(501)
+Maths II TUT	DSA Lab	FOAI Lec	WAP Lab
+	Thur		Hopper Batch	Compiler- 505 & Debugger- 405	Compiler- 505 & Debugger- 405	Room No. 401	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Compiler- 505 & Debugger- 405
+DSA Lec	Maths II Lec	WAP Lec		FOAI Lab
+Turing Batch	Room No. 501	Room No. 501	Room No. 501	 	Lunch	 	Lunch	 	Lunch	 	Lunch	Enigma- 403 & Lambda- 404
+FOAI Lec	DSA Lec	Maths II Lec	WAP Lec
+	Neumann	Room No. 502	Room No. 502	Room No. 502	 	Lunch	 	Lunch	 	Lunch	Room No. 502
+Fri	 	CONTEST
+
+--- PAGE BREAK ---
