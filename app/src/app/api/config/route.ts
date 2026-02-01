@@ -101,7 +101,17 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error('Error writing config:', error);
-        return NextResponse.json({ success: false, error: 'Failed to update config' }, { status: 500 });
+        // @ts-ignore
+        const errorMessage = error.message || 'Unknown error';
+        // @ts-ignore
+        const errorStack = error.stack || '';
+        console.error('Stack trace:', errorStack);
+
+        return NextResponse.json({
+            success: false,
+            error: 'Failed to update config',
+            details: errorMessage
+        }, { status: 500 });
     }
 }
 

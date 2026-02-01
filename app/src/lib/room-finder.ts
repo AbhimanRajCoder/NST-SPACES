@@ -102,14 +102,25 @@ function findFreeSlots(
 
 // Get current day of week
 export function getCurrentDay(): string {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
-    return days[new Date().getDay()];
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = { timeZone: 'Asia/Kolkata', weekday: 'short' };
+    const day = new Intl.DateTimeFormat('en-US', options).format(now);
+    // Match the existing format used in data (Thur instead of Thu)
+    if (day === 'Thu') return 'Thur';
+    return day;
 }
 
 // Get current time in HH:mm format
 export function getCurrentTime(): string {
     const now = new Date();
-    return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+    // en-GB ensures HH:mm format
+    return new Intl.DateTimeFormat('en-GB', options).format(now);
 }
 
 // Main function to find free rooms
