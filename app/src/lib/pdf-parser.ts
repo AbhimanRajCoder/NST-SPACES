@@ -8,7 +8,7 @@
  * to extract the data and then import it via the API.
  */
 
-import { promises as fs } from 'fs';
+
 import path from 'path';
 import type { RoomSchedule, TimeSlot } from '@/types';
 
@@ -39,28 +39,44 @@ export interface ScheduleCache {
     schedules: ParsedScheduleEntry[];
 }
 
-// Get the cache path
-function getCachePath(): string {
-    return path.join(process.cwd(), 'src', 'data', 'schedules.json');
-}
+// Schedule Cache Management via Supabase
+// We store/retrieve 'schedules.json' from the 'timetables' bucket (or a separate one).
+// Using 'timetables' bucket for simplicity: 'data/schedules.json'
 
-// Save parsed schedules to a JSON cache file
+const CACHE_FILE_PATH = 'data/schedules.json';
+
+// Save parsed schedules to Supabase
 export async function saveParsedSchedules(schedules: ParsedScheduleEntry[]): Promise<void> {
-    const cacheDir = path.join(process.cwd(), 'src', 'data');
-    const cachePath = path.join(cacheDir, 'schedules.json');
+    const supabase = await createClient();
 
-    await fs.mkdir(cacheDir, { recursive: true });
-    await fs.writeFile(cachePath, JSON.stringify({
+    const data = JSON.stringify({
         lastUpdated: new Date().toISOString(),
         schedules
-    }, null, 2));
+    }, null, 2);
+
+    await supabase
+        .storage
+        .from('timetables')
+        .upload(CACHE_FILE_PATH, data, {
+            upsert: true,
+            contentType: 'application/json'
+        });
 }
 
-// Load cached schedules
+// Load cached schedules from Supabase
 export async function loadCachedSchedules(): Promise<ParsedScheduleEntry[] | null> {
+    const supabase = await createClient();
+
     try {
-        const data = await fs.readFile(getCachePath(), 'utf-8');
-        const parsed: ScheduleCache = JSON.parse(data);
+        const { data, error } = await supabase
+            .storage
+            .from('timetables')
+            .download(CACHE_FILE_PATH);
+
+        if (error || !data) return null;
+
+        const text = await data.text();
+        const parsed: ScheduleCache = JSON.parse(text);
         return parsed.schedules;
     } catch {
         return null;
@@ -69,9 +85,18 @@ export async function loadCachedSchedules(): Promise<ParsedScheduleEntry[] | nul
 
 // Get the last cache update time
 export async function getCacheLastUpdated(): Promise<string | null> {
+    const supabase = await createClient();
+
     try {
-        const data = await fs.readFile(getCachePath(), 'utf-8');
-        const parsed: ScheduleCache = JSON.parse(data);
+        const { data, error } = await supabase
+            .storage
+            .from('timetables')
+            .download(CACHE_FILE_PATH);
+
+        if (error || !data) return null;
+
+        const text = await data.text();
+        const parsed: ScheduleCache = JSON.parse(text);
         return parsed.lastUpdated;
     } catch {
         return null;
@@ -79,19 +104,20 @@ export async function getCacheLastUpdated(): Promise<string | null> {
 }
 
 // Check if PDFs are available
+import { createClient } from '@/lib/supabase/server';
+
 export async function hasPDFData(): Promise<boolean> {
-    const timetablesDir = path.join(process.cwd(), 'public', 'timetables');
+    const supabase = await createClient();
 
     for (const semester of [1, 2]) {
-        const semesterDir = path.join(timetablesDir, `semester${semester}`);
-        try {
-            const files = await fs.readdir(semesterDir);
-            const pdfFiles = files.filter(f => f.endsWith('.pdf'));
-            if (pdfFiles.length > 0) {
-                return true;
-            }
-        } catch {
-            continue;
+        const { data: files } = await supabase
+            .storage
+            .from('timetables')
+            .list(`semester${semester}`, { limit: 1 });
+
+        if (files && files.length > 0) {
+            const hasPdf = files.some(f => f.name.endsWith('.pdf'));
+            if (hasPdf) return true;
         }
     }
 
@@ -220,10 +246,14 @@ export async function importScheduleData(
 
 // Clear all schedule data
 export async function clearScheduleData(): Promise<void> {
+    const supabase = await createClient();
     try {
-        await fs.unlink(getCachePath());
+        await supabase
+            .storage
+            .from('timetables')
+            .remove([CACHE_FILE_PATH]);
     } catch {
-        // File doesn't exist, nothing to clear
+        // Ignore error
     }
 }
 

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { readdir, stat } from 'fs/promises';
-import path from 'path';
+import { createClient } from '@/lib/supabase/server';
 
 interface PDFInfo {
     id: string;
@@ -13,38 +12,49 @@ interface PDFInfo {
 
 export async function GET() {
     try {
-        const timetablesDir = path.join(process.cwd(), 'public', 'timetables');
+        const supabase = await createClient();
         const pdfs: PDFInfo[] = [];
 
         // Check each semester folder
         for (const semester of [1, 2]) {
-            const semesterDir = path.join(timetablesDir, `semester${semester}`);
+            const { data: files, error } = await supabase
+                .storage
+                .from('timetables')
+                .list(`semester${semester}`, {
+                    limit: 100,
+                    offset: 0,
+                    sortBy: { column: 'name', order: 'asc' },
+                });
 
-            try {
-                const files = await readdir(semesterDir);
-                const pdfFiles = files.filter(f => f.endsWith('.pdf'));
-
-                for (const file of pdfFiles) {
-                    const filePath = path.join(semesterDir, file);
-                    const fileStat = await stat(filePath);
-
-                    // Extract original filename (remove timestamp prefix)
-                    const parts = file.split('_');
-                    const timestamp = parts[0];
-                    const originalName = parts.slice(1).join('_');
-
-                    pdfs.push({
-                        id: `${semester}-${timestamp}`,
-                        name: originalName || file,
-                        file_path: `/timetables/semester${semester}/${file}`,
-                        semester,
-                        is_active: true, // Most recent file per semester is active
-                        uploaded_at: fileStat.mtime.toISOString(),
-                    });
-                }
-            } catch {
-                // Directory doesn't exist, skip
+            if (error) {
+                console.error(`Error listing semester ${semester} files:`, error);
                 continue;
+            }
+
+            if (!files) continue;
+
+            const pdfFiles = files.filter(f => f.name.endsWith('.pdf'));
+
+            for (const file of pdfFiles) {
+                // Extract original filename (remove timestamp prefix)
+                const parts = file.name.split('_');
+                const timestamp = parts[0];
+                const originalName = parts.slice(1).join('_');
+
+                // Get public URL
+                const { data: { publicUrl } } = supabase
+                    .storage
+                    .from('timetables')
+                    .getPublicUrl(`semester${semester}/${file.name}`);
+
+                pdfs.push({
+                    id: `${semester}-${timestamp}`,
+                    name: originalName || file.name,
+                    file_path: publicUrl,
+                    semester,
+                    is_active: true, // Most recent file per semester is active
+                    uploaded_at: file.created_at || new Date().toISOString(),
+                });
             }
         }
 

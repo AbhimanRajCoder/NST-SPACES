@@ -1,39 +1,79 @@
-import { readdir } from 'fs/promises';
+import { writeFile, unlink } from 'fs/promises';
 import { execSync } from 'child_process';
 import path from 'path';
+import { createClient } from '@/lib/supabase/server';
+// Note: pdf-extractor might be called from API route (server context).
+// If called from client, this will fail. It seems to be used in API routes (e.g. rooms check?).
+// Actually previous grep didn't show usage. 
+// Assuming it is used or will be used by server actions/API.
+
 import type { RoomSchedule, TimeSlot } from '@/types';
 
-// Get the most recent PDF for each semester
-async function getActivePdfPaths(): Promise<string[]> {
-    const pdfs: string[] = [];
-    const timetablesDir = path.join(process.cwd(), 'public', 'timetables');
-
-    for (const semester of [1, 2]) {
-        const semesterDir = path.join(timetablesDir, `semester${semester}`);
-        try {
-            const files = await readdir(semesterDir);
-            const pdfFiles = files.filter(f => f.endsWith('.pdf')).sort().reverse();
-            if (pdfFiles.length > 0) {
-                pdfs.push(path.join(semesterDir, pdfFiles[0]));
-            }
-        } catch {
-            // Directory doesn't exist
-        }
-    }
-
-    return pdfs;
+// Helper to get Supabase client
+async function getSupabase() {
+    return await createClient();
 }
 
-// Extract text from PDF
-async function extractPdfText(pdfPath: string): Promise<string> {
+// Get the most recent PDF for each semester from Supabase
+export async function getActivePdfUrls(): Promise<{ semester: number, url: string, name: string }[]> {
+    const supabase = await getSupabase();
+    const activePdfs: { semester: number, url: string, name: string }[] = [];
+
+    for (const semester of [1, 2]) {
+        const { data: files } = await supabase
+            .storage
+            .from('timetables')
+            .list(`semester${semester}`, {
+                sortBy: { column: 'name', order: 'desc' } // Timestamp prefixed, so desc gives latest
+            });
+
+        if (files && files.length > 0) {
+            // Find first PDF
+            const pdfFile = files.find(f => f.name.endsWith('.pdf'));
+            if (pdfFile) {
+                const { data: { publicUrl } } = supabase
+                    .storage
+                    .from('timetables')
+                    .getPublicUrl(`semester${semester}/${pdfFile.name}`);
+
+                activePdfs.push({
+                    semester,
+                    url: publicUrl,
+                    name: pdfFile.name
+                });
+            }
+        }
+    }
+    return activePdfs;
+}
+
+// Download PDF to temp file and extract text
+async function extractPdfTextFromUrl(url: string, fileName: string): Promise<string> {
     try {
-        const result = execSync(`pdftotext -layout "${pdfPath}" -`, {
-            encoding: 'utf-8',
-            maxBuffer: 10 * 1024 * 1024
-        });
-        return result;
+        const response = await fetch(url);
+        const buffer = await response.arrayBuffer();
+
+        // Use /tmp for Vercel compatibility
+        const tempPath = path.join('/tmp', fileName);
+        await writeFile(tempPath, Buffer.from(buffer));
+
+        try {
+            const result = execSync(`pdftotext -layout "${tempPath}" -`, {
+                encoding: 'utf-8',
+                maxBuffer: 10 * 1024 * 1024
+            });
+
+            // Clean up
+            await unlink(tempPath);
+            return result;
+        } catch (execError) {
+            console.error('pdftotext error:', execError);
+            // Try to clean up even if exec fails
+            try { await unlink(tempPath); } catch { }
+            return '';
+        }
     } catch (error) {
-        console.error('Error extracting PDF text:', error);
+        console.error('Error downloading/extracting PDF:', error);
         return '';
     }
 }
@@ -151,7 +191,7 @@ function parseScheduleFromText(text: string): RoomSchedule[] {
                 // Find position of room mentions in line
                 const roomPatterns = [
                     new RegExp(`Room\\s*(?:No\\.?|no)?\\s*${room}`, 'gi'),
-                    new RegExp(`\\(Room\\s*(?:no)?\\s*${room}\\)`, 'gi'),
+                    new RegExp(`\\(Room\\s*(?:no)?\\s*${room}`, 'gi'),
                     new RegExp(`\\(${room}\\)`, 'g'),
                     new RegExp(`Enigma[=:\\s-]+${room}`, 'gi'),
                     new RegExp(`Lambda[=:\\s-]+${room}`, 'gi'),
@@ -235,17 +275,17 @@ function timeToMinutes(time: string): number {
 
 // Main export
 export async function getSchedulesFromPdfs(): Promise<RoomSchedule[]> {
-    const pdfPaths = await getActivePdfPaths();
+    const activePdfs = await getActivePdfUrls();
 
-    if (pdfPaths.length === 0) {
+    if (activePdfs.length === 0) {
         return [];
     }
 
     const allSchedules: RoomSchedule[] = [];
 
-    for (const pdfPath of pdfPaths) {
-        console.log('Parsing PDF:', pdfPath);
-        const text = await extractPdfText(pdfPath);
+    for (const pdf of activePdfs) {
+        console.log('Parsing PDF:', pdf.name);
+        const text = await extractPdfTextFromUrl(pdf.url, pdf.name);
         if (text.length > 0) {
             const schedules = parseScheduleFromText(text);
             console.log(`Found ${schedules.length} schedules`);
@@ -274,6 +314,6 @@ function mergeAllSchedules(schedules: RoomSchedule[]): RoomSchedule[] {
 }
 
 export async function hasPdfFiles(): Promise<boolean> {
-    const pdfs = await getActivePdfPaths();
+    const pdfs = await getActivePdfUrls();
     return pdfs.length > 0;
 }

@@ -23,6 +23,8 @@ export default function AdminDashboard() {
     const [activeWeekEndDate, setActiveWeekEndDate] = useState('');
     const [activeWeekDisplay, setActiveWeekDisplay] = useState('');
     const [weekLoading, setWeekLoading] = useState(false);
+    const [parsing, setParsing] = useState(false);
+    const [parseMessage, setParseMessage] = useState('');
 
     const fetchPdfs = useCallback(async () => {
         setLoading(true);
@@ -55,6 +57,25 @@ export default function AdminDashboard() {
 
     // We no longer update week from this simple input, redirect to management page instead
     // But keeping the display for info
+
+    const parsePdfs = async () => {
+        setParsing(true);
+        setParseMessage('');
+        try {
+            const res = await fetch('/api/parse', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                setParseMessage(`✓ ${data.message}`);
+                // Trigger ScheduleGrid refresh by forcing re-render
+                window.location.reload();
+            } else {
+                setParseMessage(`✗ ${data.error || 'Failed to parse PDFs'}`);
+            }
+        } catch (error) {
+            setParseMessage('✗ Failed to parse PDFs');
+        }
+        setParsing(false);
+    };
 
     useEffect(() => {
         fetchPdfs();
@@ -205,6 +226,41 @@ export default function AdminDashboard() {
                 } : null)}
                 onUploadComplete={fetchPdfs}
             />
+
+            {/* Parse PDFs Button */}
+            <div className="flex flex-col items-center gap-3 py-6">
+                <Button
+                    onClick={parsePdfs}
+                    disabled={parsing || !activePdfs.length}
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 text-lg"
+                    size="lg"
+                >
+                    {parsing ? (
+                        <>
+                            <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Parsing PDFs...
+                        </>
+                    ) : (
+                        <>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1z" clipRule="evenodd" />
+                            </svg>
+                            Parse PDFs & Update Schedule
+                        </>
+                    )}
+                </Button>
+                {parseMessage && (
+                    <p className={`text-sm ${parseMessage.startsWith('✓') ? 'text-green-400' : 'text-red-400'}`}>
+                        {parseMessage}
+                    </p>
+                )}
+                {!activePdfs.length && (
+                    <p className="text-sm text-slate-500">Upload PDFs first to enable parsing</p>
+                )}
+            </div>
 
             {/* Parsed Schedule Grid */}
             <div className="mt-8">

@@ -1,32 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { unlink, readdir } from 'fs/promises';
-import path from 'path';
+import { createClient } from '@/lib/supabase/server';
 
 export async function DELETE(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
         const pdfId = searchParams.get('id');
-        const filePath = searchParams.get('path');
+        // The path param from client is now a full URL or storage path. 
+        // Our updated GET route returns `file_path` as the public URL.
+        // But for deletion we need the storage path (semesterX/filename).
 
-        if (!pdfId && !filePath) {
-            return NextResponse.json({ error: 'PDF ID or path is required' }, { status: 400 });
-        }
+        let targetPath: string | null = null;
 
-        // If we have a direct file path, delete it
-        if (filePath) {
-            const absolutePath = path.join(process.cwd(), 'public', filePath);
-            try {
-                await unlink(absolutePath);
-                return NextResponse.json({ success: true, message: 'PDF deleted successfully' });
-            } catch (err) {
-                console.error('Error deleting file:', err);
-                return NextResponse.json({ error: 'File not found or could not be deleted' }, { status: 404 });
-            }
-        }
+        const supabase = await createClient();
 
-        // If we have an ID, we need to find the file first
-        // ID format: semester-timestamp
         if (pdfId) {
+            // ID format: semester-timestamp
+            // We need to find the filename. 
+            // In the new system, we can't easily find by just ID unless we list again or store metadata.
+            // But let's see if we can derive it.
+            // If we list the bucket, we can find the file.
+
             const [semesterStr, timestamp] = pdfId.split('-');
             const semester = parseInt(semesterStr, 10);
 
@@ -34,28 +27,58 @@ export async function DELETE(request: NextRequest) {
                 return NextResponse.json({ error: 'Invalid PDF ID format' }, { status: 400 });
             }
 
-            const semesterDir = path.join(process.cwd(), 'public', 'timetables', `semester${semester}`);
+            const { data: files, error } = await supabase
+                .storage
+                .from('timetables')
+                .list(`semester${semester}`);
 
-            try {
-                const files = await readdir(semesterDir);
-                // Find file that starts with the timestamp
-                const targetFile = files.find(f => f.startsWith(`${timestamp}_`));
+            if (error) {
+                return NextResponse.json({ error: `Could not list PDFs: ${error.message}` }, { status: 500 });
+            }
 
-                if (!targetFile) {
-                    return NextResponse.json({ error: 'PDF not found' }, { status: 404 });
-                }
+            const targetFile = files?.find(f => f.name.startsWith(`${timestamp}_`));
 
-                const absolutePath = path.join(semesterDir, targetFile);
-                await unlink(absolutePath);
-
-                return NextResponse.json({ success: true, message: 'PDF deleted successfully' });
-            } catch (err: any) {
-                console.error('Error:', err);
-                return NextResponse.json({ error: `Could not delete PDF: ${err.message}` }, { status: 500 });
+            if (targetFile) {
+                targetPath = `semester${semester}/${targetFile.name}`;
             }
         }
 
-        return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+        // If we have a path parameter, it might be the public URL or partial path.
+        // The client likely sends what it got from GET.
+        // GET returns public URL. 
+        // We shouldn't rely on parsing public URL strictly if ID is better.
+        // But let's support path if it looks like `semesterX/file`.
+        const paramPath = searchParams.get('path');
+        if (!targetPath && paramPath) {
+            // If it contains /timetables/semesterX/... extract it
+            // Current GET returns public URL which is long.
+            // Previous GET returned `/timetables/semesterX/file` (relative).
+
+            // Let's assume the client passes the ID for deletion usually. 
+            // If path is passed, we try to extract `semesterX/filename`.
+            if (paramPath.includes('semester')) {
+                const match = paramPath.match(/semester\d+\/.+\.pdf/);
+                if (match) {
+                    targetPath = match[0];
+                }
+            }
+        }
+
+        if (!targetPath) {
+            return NextResponse.json({ error: 'PDF not found or invalid identifier' }, { status: 404 });
+        }
+
+        const { error: deleteError } = await supabase
+            .storage
+            .from('timetables')
+            .remove([targetPath]);
+
+        if (deleteError) {
+            return NextResponse.json({ error: `Could not delete PDF: ${deleteError.message}` }, { status: 500 });
+        }
+
+        return NextResponse.json({ success: true, message: 'PDF deleted successfully' });
+
     } catch (error) {
         console.error('Delete error:', error);
         return NextResponse.json(

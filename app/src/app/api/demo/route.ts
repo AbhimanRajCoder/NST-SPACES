@@ -1,21 +1,23 @@
 import { NextResponse } from 'next/server';
-import { readdir } from 'fs/promises';
-import path from 'path';
+import { createClient } from '@/lib/supabase/server';
 import { getAllParsedSchedules, hasScheduleData, hasPDFData, getCacheLastUpdated, type ParsedScheduleEntry } from '@/lib/pdf-parser';
 
 export async function GET() {
     try {
         // Get PDF file info
-        const timetablesDir = path.join(process.cwd(), 'public', 'timetables');
+        const supabase = await createClient();
         const pdfFiles: { semester: number; files: string[] }[] = [];
 
         for (const semester of [1, 2]) {
-            const semesterDir = path.join(timetablesDir, `semester${semester}`);
-            try {
-                const files = await readdir(semesterDir);
-                const pdfs = files.filter(f => f.endsWith('.pdf'));
+            const { data: files } = await supabase
+                .storage
+                .from('timetables')
+                .list(`semester${semester}`, { limit: 100 });
+
+            if (files) {
+                const pdfs = files.filter(f => f.name.endsWith('.pdf')).map(f => f.name);
                 pdfFiles.push({ semester, files: pdfs });
-            } catch {
+            } else {
                 pdfFiles.push({ semester, files: [] });
             }
         }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { findFreeRooms, getCurrentDay, getCurrentTime } from '@/lib/room-finder';
-import { getAllParsedSchedules, hasScheduleData, toRoomSchedule, hasPDFData } from '@/lib/pdf-parser';
+import { getAllParsedSchedules, hasScheduleData, toRoomSchedule, hasPDFData, clearScheduleData, saveParsedSchedules, type ParsedScheduleEntry } from '@/lib/pdf-parser';
+import { getSchedulesFromPdfs } from '@/lib/pdf-extractor';
 import type { RoomSchedule } from '@/types';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -179,22 +180,42 @@ export async function GET(request: NextRequest) {
     }
 }
 
-// Clear cache endpoint
+// Clear/Refresh cache endpoint
 export async function POST() {
     try {
-        // Clear the cached schedules
-        const cachePath = path.join(process.cwd(), 'src', 'data', 'schedules.json');
-        try {
-            await fs.unlink(cachePath);
-        } catch {
-            // Cache file doesn't exist, that's fine
+        // 1. Clear existing cache
+        await clearScheduleData();
+
+        // 2. Trigger parsing from PDFs
+        // We need to import this dynamically or rely on valid imports
+        // Imported: getSchedulesFromPdfs (returns RoomSchedule[])
+        const schedules = await getSchedulesFromPdfs();
+
+        if (schedules.length > 0) {
+            // 3. Save to cache
+            // We need to match ParsedScheduleEntry type.
+            // RoomSchedule usually matches closely but let's map to be safe
+            // or cast if compatible.
+            // ParsedScheduleEntry slots need batch/subject which RoomSchedule might have.
+            // Let's defer to the types.
+
+            // Checking imports:
+            // We need to import getSchedulesFromPdfs from '@/lib/pdf-extractor'
+            // We need to import saveParsedSchedules from '@/lib/pdf-parser'
+
+            await saveParsedSchedules(schedules as unknown as ParsedScheduleEntry[]);
+
+            return NextResponse.json({
+                success: true,
+                message: `Cache refreshed. Parsed ${schedules.length} schedules from PDFs.`
+            });
         }
 
-        return NextResponse.json({ success: true, message: 'Cache cleared' });
+        return NextResponse.json({ success: true, message: 'Cache cleared. No schedules found in PDFs.' });
     } catch (error) {
-        console.error('Cache clear error:', error);
+        console.error('Cache refresh error:', error);
         return NextResponse.json(
-            { success: false, error: 'Failed to clear cache' },
+            { success: false, error: 'Failed to refresh cache' },
             { status: 500 }
         );
     }

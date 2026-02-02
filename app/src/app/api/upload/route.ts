@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { createClient } from '@/lib/supabase/server';
 import { importScheduleData, parseScheduleJSON, type ParsedScheduleEntry } from '@/lib/pdf-parser';
 
 export async function POST(request: NextRequest) {
@@ -44,24 +43,30 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Semester is required' }, { status: 400 });
         }
 
-        // Create directory path
-        const uploadDir = path.join(process.cwd(), 'public', 'timetables', `semester${semester}`);
+        const supabase = await createClient();
 
-        // Ensure directory exists
-        await mkdir(uploadDir, { recursive: true });
-
-        // Generate unique filename
+        // Upload to Supabase Storage
         const timestamp = Date.now();
         const fileName = `${timestamp}_${file.name}`;
-        const filePath = path.join(uploadDir, fileName);
+        const filePath = `semester${semester}/${fileName}`;
 
-        // Convert file to buffer and write
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        await writeFile(filePath, buffer);
+        const { error: uploadError } = await supabase
+            .storage
+            .from('timetables')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
 
-        // File path relative to public folder
-        const relativePath = `/timetables/semester${semester}/${fileName}`;
+        if (uploadError) {
+            throw new Error(`Storage upload failed: ${uploadError.message}`);
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase
+            .storage
+            .from('timetables')
+            .getPublicUrl(filePath);
 
         // If schedule data was provided with the upload, import it
         let scheduleImportResult = null;
@@ -88,7 +93,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({
             success: true,
-            filePath: relativePath,
+            filePath: publicUrl,
             message: scheduleImportResult
                 ? `PDF uploaded and ${scheduleImportResult.count} schedule entries imported`
                 : 'PDF uploaded. Schedule data should be imported separately.',
