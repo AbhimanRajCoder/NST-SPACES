@@ -49,9 +49,9 @@ export async function DELETE(request: NextRequest) {
                 await unlink(absolutePath);
 
                 return NextResponse.json({ success: true, message: 'PDF deleted successfully' });
-            } catch (err) {
+            } catch (err: any) {
                 console.error('Error:', err);
-                return NextResponse.json({ error: 'Could not delete PDF' }, { status: 500 });
+                return NextResponse.json({ error: `Could not delete PDF: ${err.message}` }, { status: 500 });
             }
         }
 
